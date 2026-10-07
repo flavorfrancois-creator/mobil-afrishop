@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Mobil AfriShop",
+    "slug": "mobil-afrishop",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "win.africashop.mobile"
+    },
+    "android": {
+      "package": "win.africashop.mobile"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
+
