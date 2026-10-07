@@ -17,7 +17,12 @@
     },
     "web": {
       "bundler": "metro"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5f25dabf-c954-4fa3-95ff-31f9ffae4dbd"
+      }
+    },
+    "owner": "flavoren"
   }
 }
-
