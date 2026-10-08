@@ -1,0 +1,186 @@
+{
+  "app_name": "Afrishop",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "A clean, native e-commerce experience infused with a warm, earthy African palette, allowing products and boutiques to be the undisputed visual heroes.",
+  "color": {
+    "surface": "#FDFBF7",
+    "onSurface": "#1F1C18",
+    "surfaceSecondary": "#FFFFFF",
+    "onSurfaceSecondary": "#1F1C18",
+    "surfaceTertiary": "#F2EFEB",
+    "onSurfaceTertiary": "#423B33",
+    "surfaceInverse": "#26231D",
+    "onSurfaceInverse": "#FDFBF7",
+    "brand": "#D45D3C",
+    "brandPrimary": "#C24929",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#D98F39",
+    "onBrandSecondary": "#26231D",
+    "brandTertiary": "#FCEBE5",
+    "onBrandTertiary": "#8F381F",
+    "success": "#4A6B53",
+    "onSuccess": "#FFFFFF",
+    "warning": "#D98F39",
+    "onWarning": "#26231D",
+    "error": "#B03B3B",
+    "onError": "#FFFFFF",
+    "info": "#6E695D",
+    "onInfo": "#FFFFFF",
+    "border": "#E8E2D9",
+    "borderStrong": "#C2B5A3",
+    "divider": "#E8E2D9",
+    "muted": "#7A7369",
+    "onBrand": "#FFFFFF"
+  },
+  "dark_color": {
+    "surface": "#12100E",
+    "onSurface": "#EBE7E0",
+    "surfaceSecondary": "#1C1916",
+    "onSurfaceSecondary": "#EBE7E0",
+    "surfaceTertiary": "#292521",
+    "onSurfaceTertiary": "#D6CFC4",
+    "surfaceInverse": "#EBE7E0",
+    "onSurfaceInverse": "#12100E",
+    "brand": "#D45D3C",
+    "brandPrimary": "#E3775A",
+    "onBrandPrimary": "#260F07",
+    "brandSecondary": "#EAB069",
+    "onBrandSecondary": "#2E1C07",
+    "brandTertiary": "#452419",
+    "onBrandTertiary": "#F2B8A7",
+    "success": "#6EA17D",
+    "onSuccess": "#0B2614",
+    "warning": "#EAB069",
+    "onWarning": "#2E1C07",
+    "error": "#E36D6D",
+    "onError": "#330808",
+    "border": "#36312B",
+    "borderStrong": "#5C544B",
+    "divider": "#36312B",
+    "muted": "#8C8477",
+    "onBrand": "#260F07"
+  },
+  "typography": {
+    "displayFontFamily": "Plus Jakarta Sans",
+    "textFontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous vertical breathing room for content. Safe areas meticulously respected. Cards fill horizontal space predictably with flex-wrap or full width minus padding.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": 1,
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Use for sticky headers over scrolling content (like Home or Discover).",
+      "Use for bottom tab bars.",
+      "Overlay hero cards with glass content panels."
+    ],
+    "dont's": [
+      "Never blur list rows, cards in dense product grids, or body content regions.",
+      "Avoid glass in forms or utility screens."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Home",
+      "purpose": "A rich discovery storefront featuring hero promos, categories, and trending boutiques.",
+      "states": {
+        "loading": "Skeleton UI representing the hero card and category chips.",
+        "empty": "Lottie or SVG illustration of a storefront with a 'Nothing here yet' message.",
+        "error": "Readable message 'Failed to load shops' with a prominent Retry button."
+      },
+      "layout": "Top header with logo, search, and cart. Hero section featuring a promo banner card (with gradient scrim). Horizontal scrollable category chips below. Featured marketplace campaign or Trending Sellers carousel. A responsive 2-column product grid with sale items showcasing price, promo, and vendor attribution."
+    },
+    {
+      "name": "Browse / Categories",
+      "purpose": "Allows users to dive deep into specific product verticals and shop vendor directories.",
+      "states": {
+        "loading": "Spinner centered on screen.",
+        "empty": "Illustration of an empty basket with text 'No products found'.",
+        "error": "Error state with Retry."
+      },
+      "layout": "Grid of categories using vector icons (NEVER emojis). Tapping a category opens a 2-column grid of products with filters pinned via glassmorphism header."
+    },
+    {
+      "name": "Product Detail",
+      "purpose": "Showcases a single item with large imagery, multi-currency price, and immediate 'Add to Cart'.",
+      "states": {
+        "loading": "Skeleton overlay of the product image and text blocks.",
+        "empty": "Product unavailable illustration.",
+        "error": "Error state with Retry."
+      },
+      "layout": "Large hero photo (respecting top safe area). Scrollable content underneath containing title, vendor info, and prominent pricing (strike-through muted original price and primary colored promo price). Floating CTA button pinned to the bottom (Add to Cart) over a glass container."
+    },
+    {
+      "name": "Wallet & Orders",
+      "purpose": "Consolidated loyalty wallet, multi-currency balance, and recent transaction/order tracking.",
+      "states": {
+        "loading": "Spinner centered.",
+        "empty": "Empty wallet illustration.",
+        "error": "Error state with Retry."
+      },
+      "layout": "Top section: glanceable wallet card showing multi-currency balances (XOF, GHS, XAF) with a toggle. Middle section: tier level or loyalty progress bar. Bottom section: list of recent orders or vouchers. Clean, uncluttered layout emphasizing numerical data legibility."
+    }
+  ],
+  "images": {
+    "hero_campaign": {
+      "url": "https://images.unsplash.com/photo-1709809081557-78f803ce93a0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTN8MHwxfHNlYXJjaHwzfHxhZnJpY2FuJTIwZmFzaGlvbiUyMGVjb21tZXJjZSUyMGhlcm8lMjBtb2RlbHxlbnwwfHx8fDE3OTE0ODk2ODV8MA&ixlib=rb-4.1.0&q=85",
+      "dark": "https://images.unsplash.com/photo-1532076904124-d4e8fe7fbbec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTN8MHwxfHNlYXJjaHw0fHxhZnJpY2FuJTIwZmFzaGlvbiUyMGJhc2tldCUyMGFydGlzYW4lMjBtYXJrZXRwbGFjZXxlbnwwfHx8fDE3OTE0ODk2ODV8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "African fashion hero model in warm setting"
+    },
+    "marketplace_category_feature": {
+      "url": "https://images.unsplash.com/photo-1601330862030-1e08c703ac04?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzJ8MHwxfHNlYXJjaHwxfHx3b3ZlbiUyMGJhc2tldCUyMGFydGlzYW4lMjBtYXJrZXRwbGFjZXxlbnwwfHx8fDE3OTE0ODk2ODV8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Artisan woven baskets"
+    }
+  },
+  "haptics": {
+    "tab_press": "light",
+    "add_to_cart": "medium",
+    "checkout_success": "success",
+    "wallet_toggle": "selection"
+  },
+  "instructions_to_main_agent": [
+    "REPLACE source site emojis with high-quality Phosphor icons. Zero emojis are allowed in the system UI.",
+    "App must default to French, but ensure spacing accommodates longer translations in Spanish and English.",
+    "Implement multi-currency (XOF/CFA, GHS, XAF) natively. Provide a clean currency toggle in the Wallet section. Since CFA numbers get large, ensure Plus Jakarta Sans font sizes adjust gracefully.",
+    "For promotions, show the original price muted with a strike-through, and the promo price enlarged using `brandPrimary` color.",
+    "Use a vertical gradient scrim (top-to-bottom, transparent to 70%+ surfaceInverse) whenever rendering text over a hero image.",
+    "Keep checkout and Add to Cart buttons sticky at the bottom of scrollable views using a glassmorphism container.",
+    "Ensure '1 iOS-Native Clean' guidelines are followed: spacing is generous (`lg`/`xl`), UI frames the product rather than distracting from it.",
+    "Strict color adherence: No blues, purples, or indigo anywhere. Stick to the terracotta, ochre, and sage palette."
+  ]
+}
