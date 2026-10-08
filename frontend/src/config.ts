@@ -1,7 +1,10 @@
 const BACKEND = process.env.EXPO_PUBLIC_BACKEND_URL;
 
-// All marketplace calls go through our same-origin proxy -> africashop.win/api
-export const API_BASE = `${BACKEND}/api/afm`;
+const normalizedBackend = BACKEND?.replace(/\/$/, "");
+export const API_BASE =
+  normalizedBackend === "https://africashop.win"
+    ? `${normalizedBackend}/api`
+    : `${normalizedBackend}/api/afm`;
 
 export const STORAGE_KEYS = {
   token: "afrishop_token",

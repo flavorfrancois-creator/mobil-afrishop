@@ -1,22 +1,22 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "AfriShop",
+    "slug": "afrishop",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "afrishop",
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.emergent.afrishop.bv5yqk"
+      "bundleIdentifier": "com.afrishop.customer"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.emergent.afrishop.bv5yqk"
+      "package": "com.afrishop.customer"
     },
     "web": {
       "bundler": "metro",
@@ -42,6 +42,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "23b1c294-478b-4ccf-b7f6-547bfdb43f68"
+      }
+    },
+    "owner": "flavoren"
   }
 }
