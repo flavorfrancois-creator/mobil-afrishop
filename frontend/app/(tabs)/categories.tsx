@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { CaretRight } from "phosphor-react-native";
 
-import { useCategories, useShops } from "@/src/api/hooks";
-import { Category, Shop } from "@/src/api/types";
+import { useCategories, useProducts } from "@/src/api/hooks";
+import { Category } from "@/src/api/types";
 import { categoryIcon } from "@/src/components/categoryIcon";
-import { ErrorView, LoadingView } from "@/src/components/StateViews";
+import { ProductCard } from "@/src/components/ProductCard";
+import { EmptyView, ErrorView, LoadingView } from "@/src/components/StateViews";
 import { Txt } from "@/src/components/Txt";
 import { useI18n } from "@/src/i18n";
 import { usesNativeTabs } from "@/src/navigation";
@@ -22,7 +21,24 @@ export default function CategoriesScreen() {
   const insets = useSafeAreaInsets();
 
   const categoriesQ = useCategories();
-  const shopsQ = useShops();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const categories = useMemo(() => categoriesQ.data ?? [], [categoriesQ.data]);
+  const selected = useMemo<Category | undefined>(
+    () => categories.find((c) => c.id === selectedId) ?? categories[0],
+    [categories, selectedId],
+  );
+
+  useEffect(() => {
+    if (!selectedId && categories.length > 0) setSelectedId(categories[0].id);
+  }, [categories, selectedId]);
+
+  const productsQ = useProducts(selected ? { category: selected.name } : undefined);
+  const products = useMemo(
+    () => (productsQ.data ?? []).filter((p) => p.category === selected?.name),
+    [productsQ.data, selected],
+  );
+
   const bottomChrome = usesNativeTabs ? insets.bottom : 0;
 
   return (
@@ -38,56 +54,88 @@ export default function CategoriesScreen() {
       ) : categoriesQ.isError ? (
         <ErrorView onRetry={() => categoriesQ.refetch()} />
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ padding: spacing.lg, paddingBottom: bottomChrome + spacing.xl }}
-        >
-          <View style={styles.grid}>
-            {(categoriesQ.data ?? []).map((c: Category) => {
+        <View style={styles.pane}>
+          {/* Left rail */}
+          <ScrollView
+            style={styles.rail}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: bottomChrome + spacing.xl }}
+          >
+            {categories.map((c) => {
+              const active = c.id === selected?.id;
               const Icon = categoryIcon(c.name);
               return (
                 <Pressable
                   key={c.id}
-                  testID={`category-card-${c.id}`}
-                  style={styles.catCard}
-                  onPress={() => router.push(`/products?category=${encodeURIComponent(c.name)}`)}
+                  testID={`category-rail-${c.id}`}
+                  onPress={() => setSelectedId(c.id)}
+                  style={[styles.railItem, active && styles.railItemActive]}
                 >
-                  <View style={styles.catIcon}>
-                    <Icon size={28} color={colors.brandPrimary} weight="duotone" />
-                  </View>
-                  <Txt weight="semibold" size="base" numberOfLines={2} style={{ textAlign: "center" }}>
+                  {active && <View style={styles.railAccent} />}
+                  <Icon
+                    size={22}
+                    color={active ? colors.brandPrimary : colors.muted}
+                    weight={active ? "duotone" : "regular"}
+                  />
+                  <Txt
+                    size="sm"
+                    weight={active ? "semibold" : "regular"}
+                    color={active ? "brandPrimary" : "onSurfaceTertiary"}
+                    numberOfLines={2}
+                    style={styles.railLabel}
+                  >
                     {c.name}
                   </Txt>
                 </Pressable>
               );
             })}
-          </View>
+          </ScrollView>
 
-          <Txt weight="bold" size="xl" style={{ marginTop: spacing.xl, marginBottom: spacing.md }}>
-            {t("shops")}
-          </Txt>
-          <View style={{ gap: spacing.md }}>
-            {(shopsQ.data ?? []).map((s: Shop) => (
-              <Pressable
-                key={s.id}
-                testID={`shop-row-${s.id}`}
-                style={styles.shopRow}
-                onPress={() => router.push(`/shop/${s.id}`)}
+          {/* Right content */}
+          <View style={styles.content}>
+            <View style={styles.contentHead}>
+              <Txt weight="bold" size="lg" numberOfLines={1} style={{ flex: 1 }}>
+                {selected?.name}
+              </Txt>
+              {products.length > 0 && (
+                <Pressable
+                  testID="category-see-all"
+                  hitSlop={8}
+                  onPress={() =>
+                    selected && router.push(`/products?category=${encodeURIComponent(selected.name)}`)
+                  }
+                >
+                  <Txt size="sm" weight="semibold" color="brandPrimary">
+                    {t("seeAll")}
+                  </Txt>
+                </Pressable>
+              )}
+            </View>
+
+            {productsQ.isLoading ? (
+              <LoadingView />
+            ) : productsQ.isError ? (
+              <ErrorView onRetry={() => productsQ.refetch()} />
+            ) : products.length === 0 ? (
+              <EmptyView title={t("noProducts")} />
+            ) : (
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  padding: spacing.md,
+                  paddingBottom: bottomChrome + spacing.xl,
+                  gap: spacing.md,
+                }}
               >
-                <Image source={{ uri: s.logo }} style={styles.shopLogo} contentFit="cover" />
-                <View style={{ flex: 1 }}>
-                  <Txt weight="semibold" size="base" numberOfLines={1}>
-                    {s.name}
-                  </Txt>
-                  <Txt size="sm" color="muted" numberOfLines={1}>
-                    {s.city}, {s.country}
-                  </Txt>
+                <View style={styles.grid}>
+                  {products.map((p) => (
+                    <ProductCard key={p.id} product={p} style={styles.gridCard} />
+                  ))}
                 </View>
-                <CaretRight size={18} color={colors.muted} weight="bold" />
-              </Pressable>
-            ))}
+              </ScrollView>
+            )}
           </View>
-        </ScrollView>
+        </View>
       )}
     </View>
   );
@@ -102,36 +150,40 @@ const useStyles = makeStyles((colors) => ({
     borderBottomWidth: 1,
     borderBottomColor: colors.divider,
   },
-  grid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md },
-  catCard: {
-    width: "47.8%",
-    aspectRatio: 1.3,
+  pane: { flex: 1, flexDirection: "row" },
+  rail: {
+    width: 104,
+    flexGrow: 0,
+    backgroundColor: colors.surfaceTertiary,
+    borderRightWidth: 1,
+    borderRightColor: colors.divider,
+  },
+  railItem: {
     alignItems: "center",
     justifyContent: "center",
-    gap: spacing.sm,
-    backgroundColor: colors.surfaceSecondary,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    padding: spacing.md,
+    gap: spacing.xs,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.sm,
   },
-  catIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: radius.pill,
-    backgroundColor: colors.brandTertiary,
-    alignItems: "center",
-    justifyContent: "center",
+  railItemActive: { backgroundColor: colors.surface },
+  railAccent: {
+    position: "absolute",
+    left: 0,
+    top: spacing.sm,
+    bottom: spacing.sm,
+    width: 3,
+    borderRadius: radius.sm,
+    backgroundColor: colors.brandPrimary,
   },
-  shopRow: {
+  railLabel: { textAlign: "center" },
+  content: { flex: 1 },
+  contentHead: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacing.md,
-    backgroundColor: colors.surfaceSecondary,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    padding: spacing.md,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
   },
-  shopLogo: { width: 52, height: 52, borderRadius: radius.sm, backgroundColor: colors.surfaceTertiary },
+  grid: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md },
+  gridCard: { width: "47%" },
 }));
