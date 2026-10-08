@@ -1,0 +1,36 @@
+{
+  "summary": "Forgot-password feature validated end-to-end. Backend: new POST /api/afm/auth/forgot-password proxy returns 200 with a `message` field for both registered and unknown emails (upstream intentionally generic — no user enumeration). Full pytest suite: 11/11 PASSED (9 previous + 2 new TestForgotPassword cases). Frontend (mobile viewport 390x844, FR locale): (1) forgot-password-link visible in login mode with text 'Mot de passe oublié ?'; (2) tapping link without email shows info toast 'Entrez d'abord votre e-mail'; (3) tapping link after entering customer2@afrimarket.demo shows success toast 'Si cet e-mail est enregistré, un lien de réinitialisation a été envoyé.'; (4) toggling to register mode hides the forgot-password-link (count=0) and shows name/phone fields; (5) toggling back to login re-reveals it; (6) regression — login with customer2@afrimarket.demo / Test@2026 succeeds and navigates to /(tabs) home screen with hero/categories/promotions/shops rendering live data. No new issues. Pre-existing cosmetic web-only warnings (shadow* deprecated, props.pointerEvents, useNativeDriver fallback) remain and originate from third-party RN-web/phosphor libs — non-blocking.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "web preview (phosphor-react-native / RN-web)", "issue": "Pre-existing cosmetic warnings only (shadow* deprecated → use boxShadow; props.pointerEvents deprecated → use style.pointerEvents; Animated useNativeDriver fallback on web). Not caused by this iteration's code and not blocking."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_afrishop_proxy.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "login.tsx: forgot-password-link correctly rendered only when `isLogin` is true (line 153 guard) — hidden in register mode as required.",
+    "login.tsx: onForgotPassword intentionally catches errors and shows the SAME success toast — matches the security-best-practice described in the task note (no user-existence leak).",
+    "auth.tsx: forgotPassword posts to '/auth/forgot-password' which resolves to ${BACKEND}/api/afm/auth/forgot-password through the reverse proxy — correct path.",
+    "Email is trimmed+lowercased before being sent to the upstream — consistent with signIn/signUp.",
+    "Translations for forgotPassword / forgotPasswordSent / enterEmailFirst present in fr/en/es dicts — localization complete."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_afrishop_proxy.py"
+  ],
+  "success_rate": {"backend": "100% (11/11)", "frontend": "100% (6/6 scenarios)"},
+  "seed_data_creation": "No new seed data. Forgot-password endpoint does not create persistent artifacts (upstream returns generic 200 regardless of email existence).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Forgot-password endpoint: POST /api/afm/auth/forgot-password {email} → 200 {message}. On the frontend, Pressable testID='forgot-password-link' is only mounted when mode==='login'. Both success and failure paths intentionally display the same success toast (translation key: forgotPasswordSent). Toast testID='app-toast'. Normal login testIDs unchanged: input-email, input-password, auth-submit-button, toggle-auth-mode.",
+  "rca_of_issue": "N/A — feature implementation verified correct; no bugs found."
+}

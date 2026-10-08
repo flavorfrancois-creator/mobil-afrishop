@@ -24,7 +24,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const toast = useToast();
   const insets = useSafeAreaInsets();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, forgotPassword } = useAuth();
 
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
@@ -32,8 +32,25 @@ export default function LoginScreen() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [forgotBusy, setForgotBusy] = useState(false);
 
   const isLogin = mode === "login";
+
+  const onForgotPassword = async () => {
+    if (!email.trim()) {
+      toast.show(t("enterEmailFirst"), "info");
+      return;
+    }
+    setForgotBusy(true);
+    try {
+      await forgotPassword(email);
+      toast.show(t("forgotPasswordSent"), "success");
+    } catch {
+      toast.show(t("forgotPasswordSent"), "success");
+    } finally {
+      setForgotBusy(false);
+    }
+  };
 
   const submit = async () => {
     if (!email.trim() || !password || (!isLogin && !name.trim())) {
@@ -133,6 +150,20 @@ export default function LoginScreen() {
             testID="input-password"
           />
 
+          {isLogin && (
+            <Pressable
+              testID="forgot-password-link"
+              onPress={onForgotPassword}
+              disabled={forgotBusy}
+              hitSlop={8}
+              style={styles.forgot}
+            >
+              <Txt size="sm" weight="semibold" color="brandPrimary">
+                {forgotBusy ? t("loading") : t("forgotPassword")}
+              </Txt>
+            </Pressable>
+          )}
+
           <Button
             label={isLogin ? t("login") : t("register")}
             onPress={submit}
@@ -220,4 +251,5 @@ const useStyles = makeStyles((colors) => ({
     color: colors.onSurface,
   },
   toggle: { alignItems: "center", marginTop: spacing.lg, paddingVertical: spacing.sm },
+  forgot: { alignSelf: "flex-end", paddingVertical: spacing.xs, marginTop: -spacing.xs, marginBottom: spacing.xs },
 }));

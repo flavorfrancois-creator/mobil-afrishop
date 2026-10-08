@@ -13,6 +13,7 @@ type AuthContextValue = {
   ready: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (name: string, email: string, password: string, phone?: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -75,6 +76,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [persist],
   );
 
+  const forgotPassword = useCallback(async (email: string) => {
+    await apiFetch<{ message: string }>("/auth/forgot-password", {
+      method: "POST",
+      body: { email: email.trim().toLowerCase() },
+    });
+  }, []);
+
   const signOut = useCallback(async () => {
     setAuthToken(null);
     setToken(null);
@@ -84,8 +92,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, token, ready, signIn, signUp, signOut }),
-    [user, token, ready, signIn, signUp, signOut],
+    () => ({ user, token, ready, signIn, signUp, forgotPassword, signOut }),
+    [user, token, ready, signIn, signUp, forgotPassword, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

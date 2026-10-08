@@ -34,6 +34,9 @@ const fr: Dict = {
   customerOnlyNote: "Seuls les comptes clients peuvent se connecter ici.",
   invalidCredentials: "E-mail ou mot de passe incorrect",
   fillAllFields: "Veuillez remplir tous les champs",
+  forgotPassword: "Mot de passe oublié ?",
+  forgotPasswordSent: "Si cet e-mail est enregistré, un lien de réinitialisation a été envoyé.",
+  enterEmailFirst: "Entrez d'abord votre e-mail",
 
   // tabs
   tabHome: "Accueil",
@@ -158,6 +161,9 @@ const en: Dict = {
   customerOnlyNote: "Only customer accounts can sign in here.",
   invalidCredentials: "Incorrect email or password",
   fillAllFields: "Please fill in all fields",
+  forgotPassword: "Forgot password?",
+  forgotPasswordSent: "If this email is registered, a reset link has been sent.",
+  enterEmailFirst: "Enter your email first",
 
   tabHome: "Home",
   tabCategories: "Categories",
@@ -273,6 +279,9 @@ const es: Dict = {
   customerOnlyNote: "Solo las cuentas de clientes pueden iniciar sesión aquí.",
   invalidCredentials: "Correo o contraseña incorrectos",
   fillAllFields: "Por favor completa todos los campos",
+  forgotPassword: "¿Olvidaste tu contraseña?",
+  forgotPasswordSent: "Si este correo está registrado, se ha enviado un enlace de restablecimiento.",
+  enterEmailFirst: "Introduce primero tu correo",
 
   tabHome: "Inicio",
   tabCategories: "Categorías",

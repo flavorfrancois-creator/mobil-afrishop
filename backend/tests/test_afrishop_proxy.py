@@ -78,6 +78,32 @@ class TestAuth:
         assert r.status_code in (400, 401, 403)
 
 
+# ---------- Forgot password (new feature in this iteration) ----------
+class TestForgotPassword:
+    def test_forgot_password_existing_email(self, session):
+        """POST /api/afm/auth/forgot-password with a registered email returns 200 + message."""
+        r = session.post(
+            f"{AFM}/auth/forgot-password",
+            json={"email": TEST_EMAIL},
+            timeout=30,
+        )
+        assert r.status_code == 200, f"Expected 200, got {r.status_code}: {r.text[:300]}"
+        data = r.json()
+        assert isinstance(data, dict)
+        assert "message" in data and isinstance(data["message"], str) and len(data["message"]) > 0
+
+    def test_forgot_password_unknown_email(self, session):
+        """Upstream should return the same generic 200 message for an unknown email (no user enumeration)."""
+        r = session.post(
+            f"{AFM}/auth/forgot-password",
+            json={"email": "nobody_xyz_404@afrimarket.demo"},
+            timeout=30,
+        )
+        assert r.status_code == 200, f"Expected 200, got {r.status_code}: {r.text[:300]}"
+        data = r.json()
+        assert "message" in data
+
+
 # ---------- Authenticated endpoints ----------
 class TestAuthenticated:
     def test_orders_mine(self, session, auth):
