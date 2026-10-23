@@ -1,37 +1,35 @@
 # AfriMarket customer mobile app
 
-AfriMarket is the customer shopping app for the `africashop.win` marketplace. It is built with Expo and connects to the same customer API used by the website.
+AfriMarket is the customer shopping app for [africashop.win](https://africashop.win). It is built with Expo Router and React Native, and uses the marketplace's production API.
 
 ## Customer features
 
-- Sign in, create an account, recover a forgotten password, and complete optional two-factor verification.
-- Browse and search products and shops; view product variants and stock.
-- Save products as favorites and keep a local shopping cart.
-- Get the website-calculated order quote, including currency conversion, shipping, customs, and the selected customs payment timing.
-- Checkout with an optional wallet balance and review order history and delivery status.
-- View account details and recent delivery address; change password, email, phone number, and language.
-- Request or cancel account deletion through the website's approval and email-confirmation process.
-- Enable device fingerprint login using Expo Local Authentication and SecureStore.
+- Customer sign-in, registration, forgot-password, and two-factor verification.
+- Product/category search, promotions, shops, product variants, and inventory.
+- Local cart and favorites, saved delivery address, and customer profile.
+- Server-calculated multi-currency quotes, shipping and customs estimates, and wallet checkout.
+- Order history, tracking timeline, delivery receipt confirmation, and wallet overview.
+- Change password, email, and phone; choose account language; request or cancel account deletion.
+- Optional fingerprint/biometric sign-in using device secure storage.
+- French, English, and Spanish UI translations.
 
-## Website API
+## Website connection
 
-- Mobile customer authentication and marketplace discovery: `https://africashop.win/api/mobile`
-- Customer shopping, checkout, account, and wallet APIs: `https://africashop.win/api`
-- Checkout obtains its authoritative quote from `POST /orders/quote`; the app does not estimate conversion, transport, or customs locally.
+The API client defaults to `https://africashop.win/api` and can be configured with `EXPO_PUBLIC_BACKEND_URL`. The Android package and EAS project identity are retained for AfriMarket updates.
 
-## Run the app
+The app uses the website's customer endpoints, including `/mobile/auth/*`, `/products`, `/categories`, `/shops`, `/orders/quote`, `/orders`, `/orders/mine`, `/wallet`, and `/account/*`.
+
+## Local development
+
+Install the pinned dependencies with Yarn:
 
 ```bash
-npm install
-npm start
+yarn install --frozen-lockfile
+yarn start
 ```
 
-Use Expo Go for development, or run `npm run android` with Android tooling installed.
-
-## Build an Android APK with EAS
+## Android APK
 
 ```bash
 npx eas-cli build --platform android --profile preview
 ```
-
-The Expo slug, project ID, and Android package are retained so updates use the existing AfriMarket app identity.
