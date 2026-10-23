@@ -1,10 +1,16 @@
 {
   "expo": {
-    "name": "Mobil AfriShop",
+    "name": "AfriMarket",
     "slug": "mobil-afrishop",
     "version": "1.0.0",
+    "icon": "./assets/afrimarket-icon.png",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "splash": {
+      "resizeMode": "contain",
+      "image": "./assets/afrimarket-icon.png",
+      "backgroundColor": "#ffffff"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -13,16 +19,24 @@
       "bundleIdentifier": "win.africashop.mobile"
     },
     "android": {
-      "package": "win.africashop.mobile"
+      "package": "win.africashop.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/afrimarket-icon.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/afrimarket-icon.png"
     },
     "extra": {
       "eas": {
         "projectId": "5f25dabf-c954-4fa3-95ff-31f9ffae4dbd"
       }
     },
-    "owner": "flavoren"
+    "owner": "flavoren",
+    "plugins": [
+      "expo-secure-store"
+    ]
   }
 }
