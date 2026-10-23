@@ -1,100 +1,37 @@
-# AfriMarket mobile app
+# AfriMarket customer mobile app
 
-Customer-only Android/iOS mobile app for AfriMarket, built with Expo.
+AfriMarket is the customer shopping app for the `africashop.win` marketplace. It is built with Expo and connects to the same customer API used by the website.
 
-This version is a redesigned mobile marketplace app with:
+## Customer features
 
-- real tab + stack navigation
-- dedicated marketplace home page after login
-- reusable app state for auth, cart, and favorites
-- structured Expo app files under `src/`
-- customer-only flows aligned with the AfriMarket web platform
+- Sign in, create an account, recover a forgotten password, and complete optional two-factor verification.
+- Browse and search products and shops; view product variants and stock.
+- Save products as favorites and keep a local shopping cart.
+- Get the website-calculated order quote, including currency conversion, shipping, customs, and the selected customs payment timing.
+- Checkout with an optional wallet balance and review order history and delivery status.
+- View account details and recent delivery address; change password, email, phone number, and language.
+- Request or cancel account deletion through the website's approval and email-confirmation process.
+- Enable device fingerprint login using Expo Local Authentication and SecureStore.
 
-## API base URLs
+## Website API
 
-The app uses both:
+- Mobile customer authentication and marketplace discovery: `https://africashop.win/api/mobile`
+- Customer shopping, checkout, account, and wallet APIs: `https://africashop.win/api`
+- Checkout obtains its authoritative quote from `POST /orders/quote`; the app does not estimate conversion, transport, or customs locally.
 
-- `https://africashop.win/api/mobile` for customer mobile authentication and lightweight discovery
-- `https://africashop.win/api` for the rest of the customer features already available in the web app backend
-
-## Included customer features
-
-- Customer login
-- Customer account creation
-- Forgot password request
-- Persistent login with local token storage
-- Optional fingerprint login with credentials stored in the device secure store
-- Logout that disconnects the account
-- Browse products
-- Search products
-- Browse shops
-- Search shops
-- Product detail
-- Shop detail
-- Local favorites
-- Local cart
-- Checkout / order creation
-- Order history
-- Receipt confirmation by tracking/reference code
-- Customer wallet view
-- Customer withdrawals
-- Invitation / referral code
-- Profile overview
-- Change password, email, and phone number
-- Request and cancel account deletion
-- Save account language preference
-- Profile address from the most recent order
-- Phone verification helper
-- E-mail verification helper
-- Product reporting
-
-## Main endpoints used
-
-### Mobile auth
-
-- `POST /mobile/auth/register`
-- `POST /mobile/auth/login`
-- `POST /mobile/auth/logout`
-- `GET /mobile/auth/me`
-- `GET /mobile/products`
-- `GET /mobile/shops`
-
-### Customer web-app APIs reused by the mobile app
-
-- `POST /auth/forgot-password`
-- `POST /account/password`
-- `POST /account/contact/request`
-- `POST /account/contact/confirm`
-- `GET /account/deletion`
-- `POST /account/deletion`
-- `DELETE /account/deletion`
-- `PUT /auth/language`
-- `POST /auth/send-phone-otp`
-- `POST /auth/verify-phone`
-- `POST /auth/resend-email`
-- `POST /auth/verify-email`
-- `GET /products`
-- `GET /products/{id}`
-- `POST /products/{id}/report`
-- `GET /shops`
-- `GET /shops/{id}`
-- `POST /orders`
-- `GET /orders/mine`
-- `POST /orders/confirm-by-tracking`
-- `GET /wallet`
-- `GET /withdrawals/mine`
-- `POST /withdrawals`
-
-## Run locally
+## Run the app
 
 ```bash
 npm install
 npm start
 ```
 
-Then open with Expo Go on Android/iPhone, or run:
+Use Expo Go for development, or run `npm run android` with Android tooling installed.
+
+## Build an Android APK with EAS
 
 ```bash
-npm run android
-npm run ios
+npx eas-cli build --platform android --profile preview
 ```
+
+The Expo slug, project ID, and Android package are retained so updates use the existing AfriMarket app identity.
